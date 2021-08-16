@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class AppTest {
     /**
-     * Rigorous Test :-)
+     * Rigorous Test
      */
     @Test
     public void shouldAnswerWithTrue() {
