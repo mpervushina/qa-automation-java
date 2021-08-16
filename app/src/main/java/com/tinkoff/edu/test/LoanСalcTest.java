@@ -8,6 +8,6 @@ import com.tinkoff.edu.app.LoanCalcController;
 public class LoanСalcTest {
     public static void main(String[] args) {
         int requestId = LoanCalcController.createRequest();
-        System.out.println(requestId+" must by 1");
+        System.out.println(requestId + " must by 1");
     }
 }
