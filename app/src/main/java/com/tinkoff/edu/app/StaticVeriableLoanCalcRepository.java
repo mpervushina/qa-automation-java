@@ -1,7 +1,8 @@
 package com.tinkoff.edu.app;
 
-public class StaticVeriableLoanCalcRepository implements LoanCalcRepository{
+public class StaticVeriableLoanCalcRepository implements LoanCalcRepository {
     private static int requestId;
+
     /**
      * TODO persists request
      *

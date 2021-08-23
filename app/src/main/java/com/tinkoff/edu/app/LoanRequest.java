@@ -21,7 +21,8 @@ public class LoanRequest {
     public int getAmount() {
         return amount;
     }
-    public LoanType getType(){
+
+    public LoanType getType() {
         return type;
     }
 

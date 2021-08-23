@@ -4,9 +4,9 @@ public class LoanResponse {
     private final int requestId;
     private final LoanRequest request;
 
-    public LoanResponse(int requestId,LoanRequest request){
-        this.requestId=requestId;
-        this.request=request;
+    public LoanResponse(int requestId, LoanRequest request) {
+        this.requestId = requestId;
+        this.request = request;
     }
 
     public int getRequestId() {

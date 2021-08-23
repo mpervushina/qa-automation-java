@@ -1,7 +1,7 @@
 package com.tinkoff.edu.app;
 
 
-public class StaticVeriableLoanCalcService implements LoanCalcService{
+public class StaticVeriableLoanCalcService implements LoanCalcService {
     private LoanCalcRepository loanCalcRepository;
 
     public StaticVeriableLoanCalcService(LoanCalcRepository loanCalcRepository) {
