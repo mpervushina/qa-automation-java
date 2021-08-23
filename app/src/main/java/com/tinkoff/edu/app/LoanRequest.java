@@ -21,6 +21,9 @@ public class LoanRequest {
     public int getAmount() {
         return amount;
     }
+    public LoanType getType(){
+        return type;
+    }
 
     public String toString() {
         return "RQ: {" + this.type + "," + this.getAmount() + " for " + this.getMonths() + "}";

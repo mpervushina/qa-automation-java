@@ -1,7 +1,5 @@
 package com.tinkoff.edu.app;
 
-import static com.tinkoff.edu.app.LoanCalcLogger.log;
-
 /**
  *
  */
@@ -9,11 +7,16 @@ public class LoanCalcController {
     /**
      * TODO Validates and logs request.
      */
+    private LoanCalcService loanCalcService;
+
+    public LoanCalcController(LoanCalcService loanCalcService) {
+        this.loanCalcService = loanCalcService;
+    }
+
     public int createRequest(LoanRequest request) {
 
         //param validation
         //log request
-        log(request);
-        return new LoanCalcService().createRequest(request);
+        return loanCalcService.createRequest(request);
     }
 }
