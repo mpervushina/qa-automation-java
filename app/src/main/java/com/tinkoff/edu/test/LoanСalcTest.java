@@ -1,13 +1,18 @@
 package com.tinkoff.edu.test;
 
-import com.tinkoff.edu.app.LoanCalcController;
+import com.tinkoff.edu.app.*;
 
 /**
  * Loan Calc Tests
  */
 public class LoanСalcTest {
     public static void main(String[] args) {
-        int requestId = LoanCalcController.createRequest();
-        System.out.println(requestId + " must by 1");
+        LoanRequest request = new LoanRequest(12, 1_000, LoanType.IP);
+        LoanCalcRepository loanCalcRepository = new StaticVeriableLoanCalcRepository();
+        LoanCalcController loanCalcController = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
+        int requestId = loanCalcController.createRequest(request);
+        LoanResponse response=new LoanResponse(requestId,request,ResponseType.APPROVED);
+        System.out.println(request);
+        System.out.println(response.getRequestId() + " must be 1");
     }
 }

@@ -7,11 +7,16 @@ public class LoanCalcController {
     /**
      * TODO Validates and logs request.
      */
-    public static int createRequest() {
-        int localVar;
+    private LoanCalcService loanCalcService;
+
+    public LoanCalcController(LoanCalcService loanCalcService) {
+        this.loanCalcService = loanCalcService;
+    }
+
+    public int createRequest(LoanRequest request) {
+
         //param validation
         //log request
-        LoanCalcLogger.log();
-        return LoanCalcService.createRequest();
+        return loanCalcService.createRequest(request);
     }
 }
