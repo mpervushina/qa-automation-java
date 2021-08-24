@@ -12,6 +12,6 @@ public class LoanСalcTest {
         LoanCalcController loanCalcController = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
         int requestId = loanCalcController.createRequest(request);
         System.out.println(request);
-        System.out.println(requestId + " must by 1");
+        System.out.println(requestId + " must be 1");
     }
 }
