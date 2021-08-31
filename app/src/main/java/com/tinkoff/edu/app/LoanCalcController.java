@@ -13,10 +13,17 @@ public class LoanCalcController {
         this.loanCalcService = loanCalcService;
     }
 
-    public int createRequest(LoanRequest request) {
+    public LoanResponse createRequest(LoanRequest request) {
+        if (request == null) throw new IllegalArgumentException();
 
-        //param validation
-        //log request
-        return loanCalcService.createRequest(request);
+        if (request.getMonths() > 0 && request.getMonths() <= 12 && request.getType().equals(LoanType.PERSON) && request.getAmount() > 0 && request.getAmount() <= 10000) {
+            return new LoanResponse(loanCalcService.createRequest(request), ResponseType.APPROVED);
+        }
+
+        if (request.getMonths() > 0 && request.getMonths() < 12 && request.getAmount() > 10000 && request.getType().equals(LoanType.OOO)) {
+            return new LoanResponse(loanCalcService.createRequest(request), ResponseType.APPROVED);
+        } else {
+            return new LoanResponse(-1, ResponseType.DENIED);
+        }
     }
 }
