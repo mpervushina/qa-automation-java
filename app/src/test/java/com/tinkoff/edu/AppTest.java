@@ -21,18 +21,13 @@ public class AppTest {
     private LoanCalcController sut;
 
     @BeforeEach
-    public void unit() {
+    public void init() {
         request = new LoanRequest(10, 10000, LoanType.PERSON);
-    }
-
-    @BeforeEach
-    public void sut() {
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         sut = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
     }
 
     @Test
-    @Order(1)
     public void shouldGet1WhenFirstRequest() {
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         sut = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
@@ -42,19 +37,11 @@ public class AppTest {
     }
 
     @Test
-    @Order(2)
     public void shouldGetIncrementedIdWhenAnyCall() {
         final int NOT_DEFAULT_ANY_ID = 2;
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository(NOT_DEFAULT_ANY_ID);
         this.sut = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
         assertEquals(3, sut.createRequest(request).getRequestId());
-    }
-
-    @Test
-    public void shouldGetApprovedWhenValidRequest() {
-        int approvingMothes = 10;
-        request = new LoanRequest(approvingMothes, 10000, LoanType.PERSON);
-        LoanResponse response = sut.createRequest(this.request);
     }
 
     @Test
