@@ -1,13 +1,13 @@
 package com.tinkoff.edu.app;
 
+import java.util.Objects;
+
 public class LoanResponse {
     private final int requestId;
-    private final LoanRequest request;
     private final ResponseType type;
 
-    public LoanResponse(int requestId, LoanRequest request, ResponseType type) {
+    public LoanResponse(int requestId, ResponseType type) {
         this.requestId = requestId;
-        this.request = request;
         this.type = type;
     }
 
@@ -15,11 +15,21 @@ public class LoanResponse {
         return requestId;
     }
 
-    public LoanRequest getRequest() {
-        return request;
-    }
-
     public ResponseType getType() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoanResponse response = (LoanResponse) o;
+        return requestId == response.requestId &&
+                type == response.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(requestId, type);
     }
 }
