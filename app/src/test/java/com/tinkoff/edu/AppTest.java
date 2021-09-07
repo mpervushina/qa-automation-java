@@ -31,7 +31,7 @@ public class AppTest {
     public void shouldGet1WhenFirstRequest() {
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         sut = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
-        assumeTrue(loanCalcRepository.getRequestId() == 0);
+        assumeTrue(loanCalcRepository.getRequestId() == "0");
         LoanResponse response = sut.createRequest(this.request);
         assertEquals(1, response.getRequestId());
     }
@@ -39,7 +39,7 @@ public class AppTest {
     @Test
     public void shouldGetIncrementedIdWhenAnyCall() {
         final int NOT_DEFAULT_ANY_ID = 2;
-        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository(NOT_DEFAULT_ANY_ID);
+        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository("NOT_DEFAULT_ANY_ID");
         this.sut = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
         assertEquals(3, sut.createRequest(request).getRequestId());
     }
@@ -58,7 +58,7 @@ public class AppTest {
     public void shouldGetErrorWhenApplyZeroOrNegativeAmountRequesterPerson() {
         request = new LoanRequest(12, 0, LoanType.PERSON);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(-1, ResponseType.DENIED), response);
+        assertEquals(new LoanResponse(ResponseType.DENIED), response);
     }
 
     @Test
@@ -66,7 +66,7 @@ public class AppTest {
     public void shouldGetErrorWhenApplyZeroOrNegativeMonthsRequestPerson() {
         request = new LoanRequest(0, 10000, LoanType.PERSON);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(-1, ResponseType.DENIED), response);
+        assertEquals(new LoanResponse( ResponseType.DENIED), response);
     }
 
 
@@ -75,7 +75,7 @@ public class AppTest {
     public void shouldGetErrorWhenApplyZeroOrNegativeAmountRequesterOOO() {
         request = new LoanRequest(12, 0, LoanType.OOO);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(-1, ResponseType.DENIED), response);
+        assertEquals(new LoanResponse( ResponseType.DENIED), response);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class AppTest {
     public void shouldGetErrorWhenApplyZeroOrNagativeMonthsRequestOOO() {
         request = new LoanRequest(0, 11000, LoanType.OOO);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(-1, ResponseType.DENIED), response);
+        assertEquals(new LoanResponse( ResponseType.DENIED), response);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class AppTest {
     public void shouldGetDisapprovedClientIp() {
         request = new LoanRequest(12, 10000, LoanType.IP);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(-1, ResponseType.DENIED), response);
+        assertEquals(new LoanResponse( ResponseType.DENIED), response);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class AppTest {
     public void shouldGetApprovedClientOoo() {
         request = new LoanRequest(10, 15000, LoanType.OOO);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(1, ResponseType.APPROVED), response);
+        assertEquals(new LoanResponse(ResponseType.APPROVED), response);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class AppTest {
     public void shouldGetDisapprovedClientOooDueToAmount() {
         request = new LoanRequest(10, 9000, LoanType.OOO);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(-1, ResponseType.DENIED), response);
+        assertEquals(new LoanResponse( ResponseType.DENIED), response);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class AppTest {
     public void shouldGetDisapprovedClientOooDueToMonths() {
         request = new LoanRequest(13, 11000, LoanType.OOO);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(-1, ResponseType.DENIED), response);
+        assertEquals(new LoanResponse(ResponseType.DENIED), response);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class AppTest {
     public void checkLimitValueForClientOoo() {
         request = new LoanRequest(12, 10000, LoanType.OOO);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(-1, ResponseType.DENIED), response);
+        assertEquals(new LoanResponse( ResponseType.DENIED), response);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class AppTest {
     public void shouldGetDisapprovedClientPersonDueToMonths() {
         request = new LoanRequest(13, 9000, LoanType.PERSON);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(-1, ResponseType.DENIED), response);
+        assertEquals(new LoanResponse( ResponseType.DENIED), response);
     }
 
     @Test
@@ -139,7 +139,7 @@ public class AppTest {
     public void shouldGetDisapprovedClientPerson() {
         request = new LoanRequest(12, 13000, LoanType.PERSON);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(-1, ResponseType.DENIED), response);
+        assertEquals(new LoanResponse(ResponseType.DENIED), response);
     }
 
     @Test
@@ -147,7 +147,7 @@ public class AppTest {
     public void checkLimitValueForClientPersone() {
         request = new LoanRequest(12, 10000, LoanType.PERSON);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(1, ResponseType.APPROVED), response);
+        assertEquals(new LoanResponse( ResponseType.APPROVED), response);
     }
 
     @Test
@@ -155,6 +155,6 @@ public class AppTest {
     public void shouldGetApprovedClientPerson() {
         request = new LoanRequest(5, 8000, LoanType.PERSON);
         LoanResponse response = sut.createRequest(this.request);
-        assertEquals(new LoanResponse(1, ResponseType.APPROVED), response);
+        assertEquals(new LoanResponse( ResponseType.APPROVED), response);
     }
 }

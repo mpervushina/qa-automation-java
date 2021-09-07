@@ -10,7 +10,7 @@ public class StaticVeriableLoanCalcService implements LoanCalcService {
     /**
      * TODO Loan Calculation
      */
-    public int createRequest(LoanRequest request) {
+    public String createRequest(LoanRequest request) {
 
         return loanCalcRepository.save(request);
     }

@@ -1,18 +1,22 @@
 package com.tinkoff.edu.app;
 
+import java.util.UUID;
+
 public class VeriableLoanCalcRepository implements LoanCalcRepository {
 
-    private int requestId;
+    private String requestId;
 
-    public VeriableLoanCalcRepository(int requestId) {
+
+    public VeriableLoanCalcRepository(String requestId) {
         this.requestId = requestId;
+
     }
 
     public VeriableLoanCalcRepository() {
-        this(0);
+        this.requestId=UUID.randomUUID().toString();
     }
 
-    public int getRequestId() {
+    public String getRequestId() {
         return requestId;
     }
 
@@ -22,8 +26,8 @@ public class VeriableLoanCalcRepository implements LoanCalcRepository {
      * @return Request Id
      */
     @Override
-    public int save(LoanRequest request) {
+    public String save(LoanRequest request) {
 
-        return ++requestId;
+        return this.requestId;
     }
 }

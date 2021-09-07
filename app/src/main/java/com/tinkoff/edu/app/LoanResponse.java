@@ -1,17 +1,18 @@
 package com.tinkoff.edu.app;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class LoanResponse {
-    private final int requestId;
+    private final String requestId;
     private final ResponseType type;
 
-    public LoanResponse(int requestId, ResponseType type) {
-        this.requestId = requestId;
+    public LoanResponse( ResponseType type) {
+        this.requestId= UUID.randomUUID().toString();
         this.type = type;
     }
 
-    public int getRequestId() {
+    public String getRequestId() {
         return requestId;
     }
 

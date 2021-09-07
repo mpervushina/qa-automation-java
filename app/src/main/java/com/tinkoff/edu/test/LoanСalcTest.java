@@ -10,8 +10,8 @@ public class LoanСalcTest {
         LoanRequest request = new LoanRequest(12, 1_000, LoanType.IP);
         LoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         LoanCalcController loanCalcController = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
-        int requestId = loanCalcController.createRequest(request).getRequestId();
-        LoanResponse response=new LoanResponse(requestId,ResponseType.APPROVED);
+        String requestId = loanCalcController.createRequest(request).getRequestId();
+        LoanResponse response=new LoanResponse(ResponseType.APPROVED);
         System.out.println(request);
         System.out.println(response.getRequestId() + " must be 1");
     }
