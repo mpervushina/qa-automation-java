@@ -10,8 +10,8 @@ public class StaticVeriableLoanCalcService implements LoanCalcService {
     /**
      * TODO Loan Calculation
      */
-    public String createRequest(LoanRequest request) {
+    public LoanResponse createRequest(LoanRequest request,ResponseType type) throws ValueFullException {
 
-        return loanCalcRepository.save(request);
+        return loanCalcRepository.save(request,type);
     }
 }

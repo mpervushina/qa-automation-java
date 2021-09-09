@@ -1,23 +1,17 @@
 package com.tinkoff.edu.app;
 
+import java.util.Objects;
 import java.util.UUID;
+
 
 public class VeriableLoanCalcRepository implements LoanCalcRepository {
 
-    private String requestId;
-
-
-    public VeriableLoanCalcRepository(String requestId) {
-        this.requestId = requestId;
-
-    }
+    private LoanResponse[] loanResponses;
+    private int value = 0;
 
     public VeriableLoanCalcRepository() {
-        this.requestId=UUID.randomUUID().toString();
-    }
 
-    public String getRequestId() {
-        return requestId;
+        loanResponses = new LoanResponse[1000];
     }
 
     /**
@@ -25,9 +19,41 @@ public class VeriableLoanCalcRepository implements LoanCalcRepository {
      *
      * @return Request Id
      */
-    @Override
-    public String save(LoanRequest request) {
+    public LoanResponse save(LoanRequest request, ResponseType type) throws ValueFullException {
+        if (value < 1000) {
+            UUID uuid = UUID.randomUUID();
+            LoanResponse loanResponse = new LoanResponse(uuid, type);
+            loanResponses[value++] = loanResponse;
+            return loanResponse;
+        }
+        throw new ValueFullException("Массив переполнен");
+    }
 
-        return this.requestId;
+    /**
+     * Поиск по ид заявки
+     */
+    public LoanResponse getResponseUuid(UUID uuid) throws ApplicatioNotFound {
+        for (int i = 0; i < value; i++) {
+            if (Objects.equals(loanResponses[i].getUuid(), uuid)) {
+                return loanResponses[i];
+            }
+        }
+        throw new ApplicatioNotFound("заявка не найдена");
+    }
+
+    /**
+     * Изменение статуса заявки
+     */
+    public ResponseType setResponseUuid(UUID uuid, ResponseType type) throws ApplicatioNotFound {
+        for (int i = 0; i < value; i++) {
+            if (Objects.equals(loanResponses[i].getUuid(), uuid)) {
+                loanResponses[i].setType(type);
+                return loanResponses[i].getType();
+            }
+        }
+        throw new ApplicatioNotFound("заявка не найдена");
     }
 }
+
+
+

@@ -1,5 +1,6 @@
 package com.tinkoff.edu.app;
 
 public interface LoanCalcRepository {
-    String save(LoanRequest request);
+    LoanResponse save(LoanRequest request, ResponseType type) throws ValueFullException;
+
 }

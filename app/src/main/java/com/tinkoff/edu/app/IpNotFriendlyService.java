@@ -6,8 +6,10 @@ public class IpNotFriendlyService extends StaticVeriableLoanCalcService {
     }
 
     @Override
-    public String createRequest(LoanRequest request) {
-        if (request.getType().equals(LoanType.IP)) return "";
-        return super.createRequest(request);
+    public LoanResponse createRequest(LoanRequest request, ResponseType type) throws ValueFullException {
+        if (request.getType().equals(LoanType.IP)) {
+            return super.createRequest(request, type);
+        }
+        else return super.createRequest(request, type);
     }
 }

@@ -2,17 +2,18 @@ package com.tinkoff.edu.test;
 
 import com.tinkoff.edu.app.*;
 
+import java.util.UUID;
+
 /**
  * Loan Calc Tests
  */
 public class LoanСalcTest {
     public void main(String[] args) {
-        LoanRequest request = new LoanRequest(12, 1_000, LoanType.IP);
+        LoanRequest request = new LoanRequest(12, 1_000, LoanType.IP,"");
         LoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         LoanCalcController loanCalcController = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
-        String requestId = loanCalcController.createRequest(request).getRequestId();
-        LoanResponse response=new LoanResponse(ResponseType.APPROVED);
+        LoanResponse response=new LoanResponse(UUID.randomUUID(),ResponseType.APPROVED);
         System.out.println(request);
-        System.out.println(response.getRequestId() + " must be 1");
+        System.out.println(response + " must be 1");
     }
 }

@@ -4,33 +4,36 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class LoanResponse {
-    private final String requestId;
-    private final ResponseType type;
+    private final UUID uuid;
+    private ResponseType type;
 
-    public LoanResponse( ResponseType type) {
-        this.requestId= UUID.randomUUID().toString();
+    public LoanResponse(UUID uuid, ResponseType type) {
+        this.uuid= uuid;
         this.type = type;
     }
 
-    public String getRequestId() {
-        return requestId;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public ResponseType getType() {
         return type;
     }
-
+    public void setType(ResponseType type) {
+        this.type = type;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LoanResponse response = (LoanResponse) o;
-        return requestId == response.requestId &&
+        return uuid.equals(response.uuid)  &&
                 type == response.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(requestId, type);
+        return Objects.hash(uuid, type);
     }
+
 }

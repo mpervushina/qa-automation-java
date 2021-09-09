@@ -7,11 +7,13 @@ public class LoanRequest {
     private final int months;
     private final int amount;
     private final LoanType type;
+    private final String fullname;
 
-    public LoanRequest(int months, int amount, LoanType type) {
+    public LoanRequest(int months, int amount, LoanType type, String fullname) {
         this.months = months;
         this.amount = amount;
         this.type = type;
+        this.fullname = fullname;
     }
 
     public int getMonths() {
@@ -26,7 +28,11 @@ public class LoanRequest {
         return type;
     }
 
+    public String getFullname() {
+        return fullname;
+    }
+
     public String toString() {
-        return "RQ: {" + this.type + "," + this.getAmount() + " for " + this.getMonths() + "}";
+        return "RQ: {" + this.type + "," + this.getAmount() + " for " + this.getMonths() + this.getFullname() + "}";
     }
 }
