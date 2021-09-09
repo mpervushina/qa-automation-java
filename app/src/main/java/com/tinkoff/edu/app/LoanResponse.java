@@ -1,5 +1,7 @@
 package com.tinkoff.edu.app;
 
+import com.tinkoff.edu.app.enums.ResponseType;
+
 import java.util.Objects;
 import java.util.UUID;
 

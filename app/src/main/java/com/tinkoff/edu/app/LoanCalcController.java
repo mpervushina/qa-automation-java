@@ -1,5 +1,8 @@
 package com.tinkoff.edu.app;
 
+import com.tinkoff.edu.app.enums.ResponseType;
+import com.tinkoff.edu.app.exception.FullNameLengthValidationException;
+
 /**
  *
  */
@@ -18,7 +21,7 @@ public class LoanCalcController {
         if (request == null) throw new IllegalArgumentException();
         if (request.getMonths() <= 0) throw new IllegalArgumentException("Количество месяцев должно быть больше 0");
         if (request.getAmount() <= 0) throw new IllegalArgumentException("Сумма кредита должна быть больше 0");
-        if (request.getFullname().length()<10 || request.getFullname().length()>30) throw new FullNameLengthValidationException("");
+        if (request.getFullname().length()<10 || request.getFullname().length()>30) throw new FullNameLengthValidationException("Неверное кол-во симолов");
 
         switch (request.getType()) {
             case PERSON:
@@ -32,7 +35,7 @@ public class LoanCalcController {
             case IP:
                 return ResponseType.DENIED;
             default:
-                throw new NullPointerException("Неизвестный тип клиента");
+                throw new RuntimeException("Неизвестный тип клиента");
         }
     }
 }
