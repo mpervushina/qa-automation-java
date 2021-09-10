@@ -1,35 +1,41 @@
 package com.tinkoff.edu.app;
 
+import com.tinkoff.edu.app.enums.ResponseType;
+
 import java.util.Objects;
+import java.util.UUID;
 
 public class LoanResponse {
-    private final int requestId;
-    private final ResponseType type;
+    private final UUID uuid;
+    private ResponseType type;
 
-    public LoanResponse(int requestId, ResponseType type) {
-        this.requestId = requestId;
+    public LoanResponse(UUID uuid, ResponseType type) {
+        this.uuid= uuid;
         this.type = type;
     }
 
-    public int getRequestId() {
-        return requestId;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public ResponseType getType() {
         return type;
     }
-
+    public void setType(ResponseType type) {
+        this.type = type;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LoanResponse response = (LoanResponse) o;
-        return requestId == response.requestId &&
+        return uuid.equals(response.uuid)  &&
                 type == response.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(requestId, type);
+        return Objects.hash(uuid, type);
     }
+
 }

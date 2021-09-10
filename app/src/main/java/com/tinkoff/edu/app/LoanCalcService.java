@@ -1,5 +1,8 @@
 package com.tinkoff.edu.app;
 
+import com.tinkoff.edu.app.enums.ResponseType;
+import com.tinkoff.edu.app.exception.ValueFullException;
+
 public interface LoanCalcService {
-    int createRequest(LoanRequest request);
+    LoanResponse createRequest(LoanRequest request, ResponseType type) throws ValueFullException;
 }
