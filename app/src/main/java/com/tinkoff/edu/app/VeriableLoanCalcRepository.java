@@ -3,7 +3,6 @@ package com.tinkoff.edu.app;
 import com.tinkoff.edu.app.enums.ResponseType;
 import com.tinkoff.edu.app.exception.ApplicatioNotFound;
 import com.tinkoff.edu.app.exception.ValueFullException;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -56,7 +55,7 @@ public class VeriableLoanCalcRepository implements LoanCalcRepository {
                 return loanResponses[i].getType();
             }
         }
-        throw new ApplicatioNotFound("заявка не найдена");
+        throw new ApplicatioNotFound ("заявка не найдена");
     }
 }
 

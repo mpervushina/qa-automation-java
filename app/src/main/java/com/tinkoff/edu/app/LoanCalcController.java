@@ -21,7 +21,7 @@ public class LoanCalcController {
         if (request == null) throw new IllegalArgumentException();
         if (request.getMonths() <= 0) throw new IllegalArgumentException("Количество месяцев должно быть больше 0");
         if (request.getAmount() <= 0) throw new IllegalArgumentException("Сумма кредита должна быть больше 0");
-        if (request.getFullname().length()<10 || request.getFullname().length()>30) throw new FullNameLengthValidationException("Неверное кол-во симолов");
+        if (request.getFullName().length()<10 || request.getFullName().length()>30) throw new FullNameLengthValidationException("Неверное кол-во симолов");
 
         switch (request.getType()) {
             case PERSON:

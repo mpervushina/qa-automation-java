@@ -7,9 +7,9 @@ import com.tinkoff.edu.app.enums.ResponseType;
 import com.tinkoff.edu.app.exception.ApplicatioNotFound;
 import com.tinkoff.edu.app.exception.FullNameLengthValidationException;
 import com.tinkoff.edu.app.exception.ValueFullException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -32,7 +32,7 @@ public class AppTest {
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         sut = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
     }
-    
+
     @Test
     public void shouldGetErrorWhenApplyNullRequest() {
         assertThrows(IllegalArgumentException.class,
@@ -181,30 +181,38 @@ public class AppTest {
         assertEquals("Массив переполнен", e.getMessage());
     }
 
+    public void fillingArrayCallGet() throws ValueFullException, ApplicatioNotFound {
+        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
+        for (int i = 0; i < 100; i++)
+            loanCalcRepository.save(request, ResponseType.APPROVED);
+        loanCalcRepository.getResponseUuid(UUID.randomUUID());
+    }
+
+    public void fillingArrayCallSet() throws ValueFullException, ApplicatioNotFound {
+        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
+        for (int i = 0; i < 100; i++)
+            loanCalcRepository.save(request, ResponseType.APPROVED);
+        loanCalcRepository.setResponseUuid(UUID.randomUUID(), ResponseType.DENIED);
+    }
+
     @Test
     @DisplayName("Заявка не найдена")
-    public void ApplicationNotFound() {
+    public void applicationNotFound() throws ValueFullException {
         request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
-        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         ApplicatioNotFound e = assertThrows(ApplicatioNotFound.class,
                 () -> {
-                    for (int i = 0; i < 100; i++)
-                        loanCalcRepository.save(request, ResponseType.APPROVED);
-                    loanCalcRepository.getResponseUuid(UUID.randomUUID());
+                    fillingArrayCallGet();
                 });
         assertEquals("заявка не найдена", e.getMessage());
     }
 
     @Test
     @DisplayName("Заявка не найдена при изменение")
-    public void UnsuccessfulChangeOfApplication() {
+    public void unsuccessfulChangeOfApplication() throws ValueFullException{
         request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
-        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         ApplicatioNotFound e = assertThrows(ApplicatioNotFound.class,
                 () -> {
-                    for (int i = 0; i < 100; i++)
-                        loanCalcRepository.save(request, ResponseType.APPROVED);
-                    loanCalcRepository.setResponseUuid(UUID.randomUUID(), ResponseType.DENIED);
+                    fillingArrayCallSet();
                 });
         assertEquals("заявка не найдена", e.getMessage());
     }
