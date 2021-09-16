@@ -23,8 +23,7 @@ public class VeriableLoanCalcRepository implements LoanCalcRepository {
      * @return Request Id
      */
 
-    public LoanResponse save(LoanRequest request, ResponseType type) {
-        UUID uuid = UUID.randomUUID();
+    public LoanResponse save(LoanRequest request, ResponseType type,UUID uuid) {
         LoanResponse loanResponse = new LoanResponse(uuid, type);
         mapResponse.put(uuid, type);
         return loanResponse;
@@ -35,17 +34,19 @@ public class VeriableLoanCalcRepository implements LoanCalcRepository {
      */
 
     public LoanResponse getResponseUuid(UUID uuid) throws ApplicatioNotFound {
-        if (mapResponse.containsKey(uuid)) {
+        if (mapResponse.containsKey(uuid)==true) {
             return new LoanResponse(uuid, mapResponse.get(uuid));
-        } else throw new ApplicatioNotFound("Заявка не найдена");
+        }
+        else throw new ApplicatioNotFound("Заявка не найдена");
     }
+
 
     /**
      * Изменение статуса заявки
      */
 
     public LoanResponse setResponseUuid(UUID uuid, ResponseType type) throws ApplicatioNotFound {
-        if (mapResponse.containsKey(uuid)) {
+        if (mapResponse.containsKey(uuid)==true) {
             mapResponse.put(uuid,type);
             return new LoanResponse(uuid, mapResponse.get(uuid));
         } else throw new ApplicatioNotFound("Заявка не найдена");

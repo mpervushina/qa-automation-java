@@ -7,6 +7,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface LoanCalcRepository {
-    LoanResponse save(LoanRequest request, ResponseType type) throws ValueFullException;
+    LoanResponse save(LoanRequest request, ResponseType type,UUID uuid) throws ValueFullException;
 
 }
