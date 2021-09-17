@@ -28,6 +28,7 @@ public class AppTest {
 
     @BeforeEach
     public void init() {
+        request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         sut = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
 
@@ -111,7 +112,6 @@ public class AppTest {
 
     @Test
     @DisplayName("Негативный кейс. Клиент ООО, заявка отклонена из-за превышения кол-ва месяцев")
-
     public void shouldGetDisapprovedClientOooDueToMonths() throws FullNameLengthValidationException {
         request = new LoanRequest(13, 11000, LoanType.OOO, "Sidotav Ivan Ivanovich");
         LoanResponse response = sut.createRequest(this.request);
@@ -169,7 +169,6 @@ public class AppTest {
                 });
     }
 
-
     public VeriableLoanCalcRepository fillingArrayCall() throws FullNameLengthValidationException {
         LoanResponse response = sut.createRequest(this.request);
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
@@ -189,7 +188,7 @@ public class AppTest {
 
     @Test
     @DisplayName("Заявка не найдена")
-    public void applicationNotFound5() {
+    public void applicationNotFoundChanges() {
         ApplicatioNotFound e = assertThrows(ApplicatioNotFound.class,
                 () -> {
                     fillingArrayCall().setResponseUuid(UUID.randomUUID(), ResponseType.DENIED);
@@ -199,8 +198,8 @@ public class AppTest {
 
     @Test
     @DisplayName("Проверка вывода ответа по ид заявке")
-    public void applicationNotFound1() throws FullNameLengthValidationException, ApplicatioNotFound {
-        request = new LoanRequest(12, 10000, LoanType.IP, "Sidotav Ivan Ivanovich");
+    public void checkGetResponseType() throws FullNameLengthValidationException, ApplicatioNotFound {
+        request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
         LoanResponse response = sut.createRequest(this.request);
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         loanCalcRepository.save(request, response.getType(), response.getUuid());
@@ -209,9 +208,9 @@ public class AppTest {
     }
 
     @Test
-    @DisplayName("Проверка вывода ответа по ид заявке")
-    public void applicationNotFound2() throws FullNameLengthValidationException, ApplicatioNotFound {
-        request = new LoanRequest(12, 10000, LoanType.IP, "Sidotav Ivan Ivanovich");
+    @DisplayName("Проверка изменения ответа по ид заявке")
+    public void changeCheckResponseType() throws FullNameLengthValidationException, ApplicatioNotFound {
+        request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
         LoanResponse response = sut.createRequest(this.request);
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         loanCalcRepository.save(request, response.getType(), response.getUuid());
@@ -219,15 +218,14 @@ public class AppTest {
         assertEquals(ResponseType.DENIED, type);
     }
 
-   @Test
-   @DisplayName("Проверка вывода ответа по ид заявке")
-   public void applicationOOO() throws FullNameLengthValidationException {
-       request = new LoanRequest(11, 9000, LoanType.OOO, "Sidotav Ivan Ivanovich");
-       LoanResponse response = sut.createRequest(this.request);
-       VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
-       loanCalcRepository.save(request, response.getType(), response.getUuid());
-       List<UUID> idOOO=loanCalcRepository.getOOO();
-       assertEquals(idOOO,response.getUuid());
-}
-
+    @Test
+    @DisplayName("Проверка вывода ответа по ид заявке")
+    public void applicationOOO() throws FullNameLengthValidationException {
+        request = new LoanRequest(11, 9000, LoanType.OOO, "Sidotav Ivan Ivanovich");
+        LoanResponse response = sut.createRequest(this.request);
+        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
+        loanCalcRepository.save(request, response.getType(), response.getUuid());
+        List<UUID> idOOO = loanCalcRepository.getOOO();
+        assertEquals(idOOO.get(0), response.getUuid());
+    }
 }

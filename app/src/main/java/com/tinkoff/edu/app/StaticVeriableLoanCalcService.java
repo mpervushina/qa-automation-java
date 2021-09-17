@@ -18,10 +18,10 @@ public class StaticVeriableLoanCalcService implements LoanCalcService {
      */
     public LoanResponse createRequest(LoanRequest request, ResponseType type, UUID uuid) throws ValueFullException {
 
-        return loanCalcRepository.save(request,type,uuid);
+        return loanCalcRepository.save(request, type, uuid);
     }
 
-    public List<UUID> getOOO(){
+    public List<UUID> getOOO() {
         return loanCalcRepository.getOOO();
     }
 }
