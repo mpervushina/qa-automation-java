@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,9 +28,9 @@ public class AppTest {
 
     @BeforeEach
     public void init() {
-        request = new LoanRequest(10, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         sut = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
+
     }
 
     @Test
@@ -88,6 +89,7 @@ public class AppTest {
     public void shouldGetDisapprovedClientIp() throws FullNameLengthValidationException {
         request = new LoanRequest(12, 10000, LoanType.IP, "Sidotav Ivan Ivanovich");
         LoanResponse response = sut.createRequest(this.request);
+
         assertEquals(ResponseType.DENIED, response.getType());
     }
 
@@ -198,6 +200,7 @@ public class AppTest {
     @Test
     @DisplayName("Проверка вывода ответа по ид заявке")
     public void applicationNotFound1() throws FullNameLengthValidationException, ApplicatioNotFound {
+        request = new LoanRequest(12, 10000, LoanType.IP, "Sidotav Ivan Ivanovich");
         LoanResponse response = sut.createRequest(this.request);
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         loanCalcRepository.save(request, response.getType(), response.getUuid());
@@ -208,10 +211,23 @@ public class AppTest {
     @Test
     @DisplayName("Проверка вывода ответа по ид заявке")
     public void applicationNotFound2() throws FullNameLengthValidationException, ApplicatioNotFound {
+        request = new LoanRequest(12, 10000, LoanType.IP, "Sidotav Ivan Ivanovich");
         LoanResponse response = sut.createRequest(this.request);
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         loanCalcRepository.save(request, response.getType(), response.getUuid());
         ResponseType type = loanCalcRepository.setResponseUuid(response.getUuid(), ResponseType.DENIED).getType();
         assertEquals(ResponseType.DENIED, type);
     }
+
+   @Test
+   @DisplayName("Проверка вывода ответа по ид заявке")
+   public void applicationOOO() throws FullNameLengthValidationException {
+       request = new LoanRequest(11, 9000, LoanType.OOO, "Sidotav Ivan Ivanovich");
+       LoanResponse response = sut.createRequest(this.request);
+       VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
+       loanCalcRepository.save(request, response.getType(), response.getUuid());
+       List<UUID> idOOO=loanCalcRepository.getOOO();
+       assertEquals(idOOO,response.getUuid());
+}
+
 }

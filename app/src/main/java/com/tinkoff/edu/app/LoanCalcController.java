@@ -3,6 +3,7 @@ package com.tinkoff.edu.app;
 import com.tinkoff.edu.app.enums.ResponseType;
 import com.tinkoff.edu.app.exception.FullNameLengthValidationException;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -39,5 +40,9 @@ public class LoanCalcController {
             default:
                 throw new RuntimeException("Неизвестный тип клиента");
         }
+    }
+
+    public List<UUID> getOOO(){
+        return loanCalcService.getOOO();
     }
 }
