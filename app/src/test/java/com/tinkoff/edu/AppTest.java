@@ -66,7 +66,7 @@ public class AppTest {
     }
 
     @Test
-    @DisplayName("Проверка, когда полное имя по длине меньше")
+    @DisplayName("Полное имя по длине больше разрешенного")
     public void FullNameMoreLength() {
         assertThrows(FullNameLengthValidationException.class,
                 () -> {
@@ -76,7 +76,7 @@ public class AppTest {
     }
 
     @Test
-    @DisplayName("Проверка когда полное имя по длине меньше")
+    @DisplayName("Полное имя по длине меньше разрешенного")
     public void FullNameSmallerLength() {
         assertThrows(FullNameLengthValidationException.class,
                 () -> {
@@ -187,7 +187,7 @@ public class AppTest {
     }
 
     @Test
-    @DisplayName("Заявка не найдена")
+    @DisplayName("При изменение ответа , заявка не найдена")
     public void applicationNotFoundChanges() {
         ApplicatioNotFound e = assertThrows(ApplicatioNotFound.class,
                 () -> {
@@ -219,8 +219,8 @@ public class AppTest {
     }
 
     @Test
-    @DisplayName("Проверка вывода ответа по ид заявке")
-    public void applicationOOO() throws FullNameLengthValidationException {
+    @DisplayName("Вывод ид поклиенту ООО")
+    public void applicationFromOOO() throws FullNameLengthValidationException {
         request = new LoanRequest(11, 9000, LoanType.OOO, "Sidotav Ivan Ivanovich");
         LoanResponse response = sut.createRequest(this.request);
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();

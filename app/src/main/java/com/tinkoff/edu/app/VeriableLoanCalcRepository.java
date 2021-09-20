@@ -8,10 +8,8 @@ import java.util.*;
 
 
 public class VeriableLoanCalcRepository implements LoanCalcRepository {
-    private ResponseType responseType;
-    private UUID uuid;
     private Map<UUID, ResponseType> mapResponse = new HashMap<>();
-    private List<UUID> ListofOOO = new ArrayList<>();
+    private List<UUID> listofOOO = new ArrayList<>();
 
     public VeriableLoanCalcRepository() {
     }
@@ -26,7 +24,7 @@ public class VeriableLoanCalcRepository implements LoanCalcRepository {
         LoanResponse loanResponse = new LoanResponse(uuid, type);
         mapResponse.put(uuid, type);
         if (request.getType().equals(LoanType.OOO)) {
-            ListofOOO.add(uuid);
+            listofOOO.add(uuid);
         }
         return loanResponse;
     }
@@ -36,7 +34,7 @@ public class VeriableLoanCalcRepository implements LoanCalcRepository {
      */
     @Override
     public List<UUID> getOOO() {
-        return ListofOOO;
+        return listofOOO;
     }
 
     /**
@@ -44,7 +42,7 @@ public class VeriableLoanCalcRepository implements LoanCalcRepository {
      */
 
     public LoanResponse getResponseUuid(UUID uuid) throws ApplicatioNotFound {
-        if (mapResponse.containsKey(uuid) == true) {
+        if (mapResponse.containsKey(uuid)) {
             return new LoanResponse(uuid, mapResponse.get(uuid));
         } else throw new ApplicatioNotFound("Заявка не найдена");
     }
