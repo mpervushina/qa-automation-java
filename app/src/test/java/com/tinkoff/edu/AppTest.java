@@ -6,12 +6,12 @@ import com.tinkoff.edu.app.enums.LoanType;
 import com.tinkoff.edu.app.enums.ResponseType;
 import com.tinkoff.edu.app.exception.ApplicatioNotFound;
 import com.tinkoff.edu.app.exception.FullNameLengthValidationException;
-import com.tinkoff.edu.app.exception.ValueFullException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,9 +28,10 @@ public class AppTest {
 
     @BeforeEach
     public void init() {
-        request = new LoanRequest(10, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
+        request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
         sut = new LoanCalcController(new StaticVeriableLoanCalcService(loanCalcRepository));
+
     }
 
     @Test
@@ -38,7 +39,7 @@ public class AppTest {
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     request = null;
-                    ResponseType response = sut.createRequest(this.request);
+                    LoanResponse response = sut.createRequest(this.request);
                 });
     }
 
@@ -48,7 +49,7 @@ public class AppTest {
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     request = new LoanRequest(12, 0, LoanType.PERSON, "Sidotav Ivan Ivanovich");
-                    ResponseType response = sut.createRequest(this.request);
+                    LoanResponse response = sut.createRequest(this.request);
                     assertEquals(ResponseType.DENIED, response);
                 });
     }
@@ -59,28 +60,28 @@ public class AppTest {
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     request = new LoanRequest(0, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
-                    ResponseType response = sut.createRequest(this.request);
+                    LoanResponse response = sut.createRequest(this.request);
                     assertEquals(ResponseType.DENIED, response);
                 });
     }
 
     @Test
-    @DisplayName("Проверка, когда полное имя по длине меньше")
+    @DisplayName("Полное имя по длине больше разрешенного")
     public void FullNameMoreLength() {
         assertThrows(FullNameLengthValidationException.class,
                 () -> {
                     request = new LoanRequest(2, 10000, LoanType.PERSON, "1234567890qwertyuiop555555asdfg");
-                    ResponseType response = sut.createRequest(this.request);
+                    LoanResponse response = sut.createRequest(this.request);
                 });
     }
 
     @Test
-    @DisplayName("Проверка когда полное имя по длине меньше")
+    @DisplayName("Полное имя по длине меньше разрешенного")
     public void FullNameSmallerLength() {
         assertThrows(FullNameLengthValidationException.class,
                 () -> {
                     request = new LoanRequest(2, 10000, LoanType.PERSON, "uuu");
-                    ResponseType response = sut.createRequest(this.request);
+                    LoanResponse response = sut.createRequest(this.request);
                 });
     }
 
@@ -88,73 +89,73 @@ public class AppTest {
     @DisplayName("Заявка для ИП клиента")
     public void shouldGetDisapprovedClientIp() throws FullNameLengthValidationException {
         request = new LoanRequest(12, 10000, LoanType.IP, "Sidotav Ivan Ivanovich");
-        ResponseType response = sut.createRequest(this.request);
-        assertEquals(ResponseType.DENIED, response);
+        LoanResponse response = sut.createRequest(this.request);
+
+        assertEquals(ResponseType.DENIED, response.getType());
     }
 
     @Test
     @DisplayName("Успешная заявка для клиента с типом ООО")
     public void shouldGetApprovedClientOoo() throws FullNameLengthValidationException {
         request = new LoanRequest(10, 15000, LoanType.OOO, "Sidotav Ivan Ivanovich");
-        ResponseType response = sut.createRequest(this.request);
-        assertEquals(ResponseType.APPROVED, response);
+        LoanResponse response = sut.createRequest(this.request);
+        assertEquals(ResponseType.APPROVED, response.getType());
     }
 
     @Test
     @DisplayName("Клиент ООО, заявка отклонена из-за маленькой суммы")
     public void shouldGetDisapprovedClientOooDueToAmount() throws FullNameLengthValidationException {
         request = new LoanRequest(10, 9000, LoanType.OOO, "Sidotav Ivan Ivanovich");
-        ResponseType response = sut.createRequest(this.request);
-        assertEquals(ResponseType.DENIED, response);
+        LoanResponse response = sut.createRequest(this.request);
+        assertEquals(ResponseType.DENIED, response.getType());
     }
 
     @Test
     @DisplayName("Негативный кейс. Клиент ООО, заявка отклонена из-за превышения кол-ва месяцев")
-
     public void shouldGetDisapprovedClientOooDueToMonths() throws FullNameLengthValidationException {
         request = new LoanRequest(13, 11000, LoanType.OOO, "Sidotav Ivan Ivanovich");
-        ResponseType response = sut.createRequest(this.request);
-        assertEquals(ResponseType.DENIED, response);
+        LoanResponse response = sut.createRequest(this.request);
+        assertEquals(ResponseType.DENIED, response.getType());
     }
 
     @Test
     @DisplayName("Клиент OOO, проверка граничных значений месяца и суммы")
     public void checkLimitValueForClientOoo() throws FullNameLengthValidationException {
         request = new LoanRequest(12, 10000, LoanType.OOO, "Sidotav Ivan Ivanovich");
-        ResponseType response = sut.createRequest(this.request);
-        assertEquals(ResponseType.DENIED, response);
+        LoanResponse response = sut.createRequest(this.request);
+        assertEquals(ResponseType.DENIED, response.getType());
     }
 
     @Test
     @DisplayName("Клиент PERSON, заявка отклонена из-за превышения кол-ва месяцев")
     public void shouldGetDisapprovedClientPersonDueToMonths() throws FullNameLengthValidationException {
         request = new LoanRequest(13, 9000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
-        ResponseType response = sut.createRequest(this.request);
-        assertEquals(ResponseType.DENIED, response);
+        LoanResponse response = sut.createRequest(this.request);
+        assertEquals(ResponseType.DENIED, response.getType());
     }
 
     @Test
     @DisplayName("Клиент PERSON, заявка отклонена из-за превышения суммы")
     public void shouldGetDisapprovedClientPerson() throws FullNameLengthValidationException {
         request = new LoanRequest(12, 13000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
-        ResponseType response = sut.createRequest(this.request);
-        assertEquals(ResponseType.DENIED, response);
+        LoanResponse response = sut.createRequest(this.request);
+        assertEquals(ResponseType.DENIED, response.getType());
     }
 
     @Test
     @DisplayName("Клиент PERSON, проверка граничных значений месяца и суммы")
     public void checkLimitValueForClientPersone() throws FullNameLengthValidationException {
         request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
-        ResponseType response = sut.createRequest(this.request);
-        assertEquals(ResponseType.APPROVED, response);
+        LoanResponse response = sut.createRequest(this.request);
+        assertEquals(ResponseType.APPROVED, response.getType());
     }
 
     @Test
     @DisplayName("Успешная заявка для клиента с типом Person")
     public void shouldGetApprovedClientPerson() throws FullNameLengthValidationException {
         request = new LoanRequest(5, 8000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
-        ResponseType response = sut.createRequest(this.request);
-        assertEquals(ResponseType.APPROVED, response);
+        LoanResponse response = sut.createRequest(this.request);
+        assertEquals(ResponseType.APPROVED, response.getType());
     }
 
     @Test
@@ -163,57 +164,68 @@ public class AppTest {
         assertThrows(NullPointerException.class,
                 () -> {
                     request = new LoanRequest(5, 8000, null, "Sidotav Ivan Ivanovich");
-                    ResponseType response = sut.createRequest(this.request);
-                    assertEquals(ResponseType.APPROVED, response);
+                    LoanResponse response = sut.createRequest(this.request);
+                    assertEquals(ResponseType.APPROVED, response.getType());
                 });
     }
 
-    @Test
-    @DisplayName("Переполнение массива")
-    public void checkingUuid() {
-        request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
+    public VeriableLoanCalcRepository fillingArrayCall() throws FullNameLengthValidationException {
+        LoanResponse response = sut.createRequest(this.request);
         VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
-        ValueFullException e = assertThrows(ValueFullException.class,
-                () -> {
-                    for (int i = 0; i < 1001; i++)
-                        loanCalcRepository.save(request, ResponseType.APPROVED);
-                });
-        assertEquals("Массив переполнен", e.getMessage());
-    }
-
-    public void fillingArrayCallGet() throws ValueFullException, ApplicatioNotFound {
-        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
-        for (int i = 0; i < 100; i++)
-            loanCalcRepository.save(request, ResponseType.APPROVED);
-        loanCalcRepository.getResponseUuid(UUID.randomUUID());
-    }
-
-    public void fillingArrayCallSet() throws ValueFullException, ApplicatioNotFound {
-        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
-        for (int i = 0; i < 100; i++)
-            loanCalcRepository.save(request, ResponseType.APPROVED);
-        loanCalcRepository.setResponseUuid(UUID.randomUUID(), ResponseType.DENIED);
+        loanCalcRepository.save(request, response.getType(), response.getUuid());
+        return loanCalcRepository;
     }
 
     @Test
     @DisplayName("Заявка не найдена")
-    public void applicationNotFound() throws ValueFullException {
-        request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
+    public void applicationNotFound() {
         ApplicatioNotFound e = assertThrows(ApplicatioNotFound.class,
                 () -> {
-                    fillingArrayCallGet();
+                    fillingArrayCall().getResponseUuid(UUID.randomUUID());
                 });
-        assertEquals("заявка не найдена", e.getMessage());
+        assertEquals("Заявка не найдена", e.getMessage());
     }
 
     @Test
-    @DisplayName("Заявка не найдена при изменение")
-    public void unsuccessfulChangeOfApplication() throws ValueFullException{
-        request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
+    @DisplayName("При изменение ответа , заявка не найдена")
+    public void applicationNotFoundChanges() {
         ApplicatioNotFound e = assertThrows(ApplicatioNotFound.class,
                 () -> {
-                    fillingArrayCallSet();
+                    fillingArrayCall().setResponseUuid(UUID.randomUUID(), ResponseType.DENIED);
                 });
-        assertEquals("заявка не найдена", e.getMessage());
+        assertEquals("Заявка не найдена", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Проверка вывода ответа по ид заявке")
+    public void checkGetResponseType() throws FullNameLengthValidationException, ApplicatioNotFound {
+        request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
+        LoanResponse response = sut.createRequest(this.request);
+        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
+        loanCalcRepository.save(request, response.getType(), response.getUuid());
+        ResponseType type = loanCalcRepository.getResponseUuid(response.getUuid()).getType();
+        assertEquals(ResponseType.APPROVED, type);
+    }
+
+    @Test
+    @DisplayName("Проверка изменения ответа по ид заявке")
+    public void changeCheckResponseType() throws FullNameLengthValidationException, ApplicatioNotFound {
+        request = new LoanRequest(12, 10000, LoanType.PERSON, "Sidotav Ivan Ivanovich");
+        LoanResponse response = sut.createRequest(this.request);
+        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
+        loanCalcRepository.save(request, response.getType(), response.getUuid());
+        ResponseType type = loanCalcRepository.setResponseUuid(response.getUuid(), ResponseType.DENIED).getType();
+        assertEquals(ResponseType.DENIED, type);
+    }
+
+    @Test
+    @DisplayName("Вывод ид поклиенту ООО")
+    public void applicationFromOOO() throws FullNameLengthValidationException {
+        request = new LoanRequest(11, 9000, LoanType.OOO, "Sidotav Ivan Ivanovich");
+        LoanResponse response = sut.createRequest(this.request);
+        VeriableLoanCalcRepository loanCalcRepository = new VeriableLoanCalcRepository();
+        loanCalcRepository.save(request, response.getType(), response.getUuid());
+        List<UUID> idOOO = loanCalcRepository.getOOO();
+        assertEquals(idOOO.get(0), response.getUuid());
     }
 }

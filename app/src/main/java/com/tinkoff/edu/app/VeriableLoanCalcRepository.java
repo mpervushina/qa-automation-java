@@ -1,21 +1,17 @@
 package com.tinkoff.edu.app;
 
+import com.tinkoff.edu.app.enums.LoanType;
 import com.tinkoff.edu.app.enums.ResponseType;
 import com.tinkoff.edu.app.exception.ApplicatioNotFound;
-import com.tinkoff.edu.app.exception.ValueFullException;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 
 public class VeriableLoanCalcRepository implements LoanCalcRepository {
-
-    private LoanResponse[] loanResponses;
-    private int value = 0;
+    private Map<UUID, ResponseType> mapResponse = new HashMap<>();
+    private List<UUID> listofOOO = new ArrayList<>();
 
     public VeriableLoanCalcRepository() {
-
-        loanResponses = new LoanResponse[1000];
     }
 
     /**
@@ -23,39 +19,44 @@ public class VeriableLoanCalcRepository implements LoanCalcRepository {
      *
      * @return Request Id
      */
-    public LoanResponse save(LoanRequest request, ResponseType type) throws ValueFullException {
-        if (value < 1000) {
-            UUID uuid = UUID.randomUUID();
-            LoanResponse loanResponse = new LoanResponse(uuid, type);
-            loanResponses[value++] = loanResponse;
-            return loanResponse;
+
+    public LoanResponse save(LoanRequest request, ResponseType type, UUID uuid) {
+        LoanResponse loanResponse = new LoanResponse(uuid, type);
+        mapResponse.put(uuid, type);
+        if (request.getType().equals(LoanType.OOO)) {
+            listofOOO.add(uuid);
         }
-        throw new ValueFullException("Массив переполнен");
+        return loanResponse;
+    }
+
+    /**
+     * Список заявок по клиентам ООО
+     */
+    @Override
+    public List<UUID> getOOO() {
+        return listofOOO;
     }
 
     /**
      * Поиск по ид заявки
      */
+
     public LoanResponse getResponseUuid(UUID uuid) throws ApplicatioNotFound {
-        for (int i = 0; i < value; i++) {
-            if (Objects.equals(loanResponses[i].getUuid(), uuid)) {
-                return loanResponses[i];
-            }
-        }
-        throw new ApplicatioNotFound("заявка не найдена");
+        if (mapResponse.containsKey(uuid)) {
+            return new LoanResponse(uuid, mapResponse.get(uuid));
+        } else throw new ApplicatioNotFound("Заявка не найдена");
     }
+
 
     /**
      * Изменение статуса заявки
      */
-    public ResponseType setResponseUuid(UUID uuid, ResponseType type) throws ApplicatioNotFound {
-        for (int i = 0; i < value; i++) {
-            if (Objects.equals(loanResponses[i].getUuid(), uuid)) {
-                loanResponses[i].setType(type);
-                return loanResponses[i].getType();
-            }
-        }
-        throw new ApplicatioNotFound ("заявка не найдена");
+
+    public LoanResponse setResponseUuid(UUID uuid, ResponseType type) throws ApplicatioNotFound {
+        if (mapResponse.containsKey(uuid)) {
+            mapResponse.put(uuid, type);
+            return new LoanResponse(uuid, mapResponse.get(uuid));
+        } else throw new ApplicatioNotFound("Заявка не найдена");
     }
 }
 
