@@ -6,9 +6,11 @@ import com.tinkoff.edu.app.enums.LoanType;
 import com.tinkoff.edu.app.enums.ResponseType;
 import com.tinkoff.edu.app.exception.ApplicatioNotFound;
 import com.tinkoff.edu.app.exception.FullNameLengthValidationException;
+import com.tinkoff.edu.app.exception.ValueFullException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 
 
 import java.util.List;
@@ -34,6 +36,7 @@ public class AppTest {
 
     }
 
+    @ParameterizedTest
     @Test
     public void shouldGetErrorWhenApplyNullRequest() {
         assertThrows(IllegalArgumentException.class,
@@ -228,4 +231,15 @@ public class AppTest {
         List<UUID> idOOO = loanCalcRepository.getOOO();
         assertEquals(idOOO.get(0), response.getUuid());
     }
+
+    @Test
+    public void applicationFrom1OOO() throws FullNameLengthValidationException, ValueFullException, ApplicatioNotFound {
+        request = new LoanRequest(11, 9000, LoanType.OOO, "Sidotav Ivan Ivanovich");
+        LoanResponse response = sut.createRequest(this.request);
+        LoanCalcRepository fileLoanCalcRepository = new FileLoanCalcRepository();
+        fileLoanCalcRepository.save(request, response.getType(), response.getUuid());
+        LoanResponse type = fileLoanCalcRepository.getResponseUuid(response.getUuid());
+        System.out.println(type);
+    }
+
 }
