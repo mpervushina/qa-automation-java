@@ -10,16 +10,23 @@ import java.util.UUID;
 
 public class FileLoanCalcRepository implements LoanCalcRepository {
 
+    /**
+     * Сохранение ид и ответа по заявке
+     */
+
     @Override
     public LoanResponse save(LoanRequest request, ResponseType type, UUID uuid) {
         try (FileWriter uuidWriter = new FileWriter("FileUUID.txt", true)) {
             String uuidType = String.format("%s - %s\n", uuid, type);
             uuidWriter.write(uuidType);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
         }
         return new LoanResponse(uuid, type);
     }
+
+    /**
+     * Поиск по ид заявки
+     */
 
     @Override
     public LoanResponse getResponseUuid(UUID uuid) throws ApplicatioNotFound {
