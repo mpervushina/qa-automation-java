@@ -41,7 +41,7 @@ public class FileLoanCalcRepository implements LoanCalcRepository {
             if (type == null) {
                 throw new ApplicatioNotFound("Заявка не найдена");
             }
-        } catch (IOException | ApplicatioNotFound e) {
+        } catch (IOException e) {
             throw new ApplicatioNotFound("Заявка не найдена");
         }
         return new LoanResponse(uuid, type);
