@@ -15,11 +15,11 @@ public class FileLoanCalcRepository implements LoanCalcRepository {
      */
 
     @Override
-    public LoanResponse save(LoanRequest request, ResponseType type, UUID uuid) {
+    public LoanResponse save(LoanRequest request, ResponseType type, UUID uuid){
         try (FileWriter uuidWriter = new FileWriter("FileUUID.txt", true)) {
             String uuidType = String.format("%s - %s\n", uuid, type);
             uuidWriter.write(uuidType);
-        } catch (Exception e) {
+        } catch (IOException ignored) {
         }
         return new LoanResponse(uuid, type);
     }
@@ -41,8 +41,8 @@ public class FileLoanCalcRepository implements LoanCalcRepository {
             if (type == null) {
                 throw new ApplicatioNotFound("Заявка не найдена");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | ApplicatioNotFound e) {
+            throw new ApplicatioNotFound("Заявка не найдена");
         }
         return new LoanResponse(uuid, type);
     }
