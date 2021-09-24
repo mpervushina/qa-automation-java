@@ -20,8 +20,4 @@ public class StaticVeriableLoanCalcService implements LoanCalcService {
 
         return loanCalcRepository.save(request, type, uuid);
     }
-
-    public List<UUID> getOOO() {
-        return loanCalcRepository.getOOO();
-    }
 }

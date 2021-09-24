@@ -8,5 +8,4 @@ import java.util.UUID;
 
 public interface LoanCalcService {
     LoanResponse createRequest(LoanRequest request, ResponseType type, UUID uuid) throws ValueFullException;
-    List<UUID> getOOO();
 }

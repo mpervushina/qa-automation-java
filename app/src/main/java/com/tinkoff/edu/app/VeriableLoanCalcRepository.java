@@ -32,7 +32,7 @@ public class VeriableLoanCalcRepository implements LoanCalcRepository {
     /**
      * Список заявок по клиентам ООО
      */
-    @Override
+
     public List<UUID> getOOO() {
         return listofOOO;
     }
